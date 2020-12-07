@@ -10,13 +10,15 @@
       </div>
       <button type="submit" class="btn btn-light btn-block">Save</button>
     </form>
-    <button @click="clearForm()" class="btn btn-danger btn-block">Cancel</button>
+
     <nav aria-label="Page navigation example">
       <ul class="pagination">
         <li v-bind:class="[{disabled: !pagination.prev_page_url}]" class="page-item"><a class="page-link" href="#" @click="fetchArticles(pagination.prev_page_url)">Previous</a></li>
 
+        <!--current page number-->
         <li class="page-item disabled"><a class="page-link text-dark" href="#">Page {{ pagination.current_page }} of {{ pagination.last_page }}</a></li>
-    
+
+        <!--next page-->
         <li v-bind:class="[{disabled: !pagination.next_page_url}]" class="page-item"><a class="page-link" href="#" @click="fetchArticles(pagination.next_page_url)">Next</a></li>
       </ul>
     </nav>
@@ -24,8 +26,9 @@
       <h3>{{ article.title }}</h3>
       <p>{{ article.body }}</p>
       <hr>
-      <button @click="editArticle(article)" class="btn btn-warning mb-2">Edit</button>
-      <button @click="deleteArticle(article.id)" class="btn btn-danger">Delete</button>
+      <!--delete and edit buttonss-->
+      <button @click="editArticle(article)" class="btn  mb-2">Edit</button>
+      <button @click="deleteArticle(article.id)" class="btn ">Delete</button>
     </div>
   </div>
 </template>
@@ -49,7 +52,6 @@ export default {
   created() {
     this.fetchArticles();
   },
-
   methods: {
     fetchArticles(page_url) {
       let vm = this;
@@ -72,6 +74,7 @@ export default {
 
       this.pagination = pagination;
     },
+
     deleteArticle(id) {
       if (confirm('Are You Sure?')) {
         fetch(`api/article/${id}`, {
@@ -97,7 +100,8 @@ export default {
         })
           .then(res => res.json())
           .then(data => {
-            this.clearForm();
+            this.article.title='';
+            this.article.body='';
             alert('Article Added');
             this.fetchArticles();
           })
